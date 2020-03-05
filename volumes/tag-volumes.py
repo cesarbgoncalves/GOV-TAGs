@@ -4,7 +4,7 @@ ec2 = boto3.client('ec2')
 
 volumes = {}
 tags_list = []
-tags_condition = ['Service', 'Environment', 'Country', 'Product', 'Platform', 'Owner']
+# tags_condition = ['Service', 'Environment', 'Country', 'Product', 'Platform', 'Owner']
 
 for response in ec2.get_paginator('describe_volumes').paginate():
     volumes.update([(volume['VolumeId'], volume) for volume in response['Volumes']])
