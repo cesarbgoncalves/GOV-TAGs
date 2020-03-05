@@ -1,5 +1,4 @@
 import copy
-import logging
 import os
 import boto3
 
@@ -7,36 +6,34 @@ ec2 = boto3.client('ec2')
 
 def tag_snapshots():
     snapshots = {}
-    """
-    Pega todas os Snapshots
-    """
     for response in ec2.get_paginator('describe_snapshots').paginate(OwnerIds=['self']):
         snapshots.update([(snapshot['SnapshotId'], snapshot) for snapshot in response['Snapshots']])
 
     for image in ec2.describe_images(Owners=['self'])['Images']:
         tags = boto3_tag_list_to_ansible_dict(image.get('Tags', []))
         for device in image['BlockDeviceMappings']:
-            if 'SnapshotId' in device['Ebs']:
-                snapshot = snapshots[device['Ebs']['SnapshotId']]
-                snapshot['Used'] = True
-                cur_tags = boto3_tag_list_to_ansible_dict(snapshot.get('Tags', []))
-                new_tags = copy.deepcopy(cur_tags)
-                new_tags.update(tags)
-                new_tags['ImageId'] = image['ImageId']
-                new_tags['Name'] += ' ' + device['DeviceName']
-                if new_tags != cur_tags:
-                    logger.info('{0}: Tags changed to {1}'.format(snapshot['SnapshotId'], new_tags))
-                    ec2.create_tags(Resources=[snapshot['SnapshotId']], Tags=ansible_dict_to_boto3_tag_list(new_tags))
+            if 'Ebs' in device:
+                if 'SnapshotId' in device['Ebs']:
+                    snapshot = snapshots[device['Ebs']['SnapshotId']]
+                    snapshot['Used'] = True
+                    cur_tags = boto3_tag_list_to_ansible_dict(snapshot.get('Tags', []))
+                    new_tags = copy.deepcopy(cur_tags)
+                    new_tags.update(tags)
+                    new_tags['ImageId'] = image['ImageId']
+                    # new_tags['Name'] += ' ' + device['DeviceName']
+                    if new_tags != cur_tags:
+                        ec2.create_tags(Resources=[snapshot['SnapshotId']], Tags=ansible_dict_to_boto3_tag_list(new_tags))
 
+""" 
+    Este for é usado para renomear os Snapshots não utilizados com UNUSED no começo
     for snapshot in snapshots.values():
         if 'Used' not in snapshot:
             cur_tags = boto3_tag_list_to_ansible_dict(snapshot.get('Tags', []))
             name = cur_tags.get('Name', snapshot['SnapshotId'])
             if not name.startswith('UNUSED'):
-                logger.warning('{0} Unused!'.format(snapshot['SnapshotId']))
                 cur_tags['Name'] = 'UNUSED ' + name
                 ec2.create_tags(Resources=[snapshot['SnapshotId']], Tags=ansible_dict_to_boto3_tag_list(cur_tags))
-
+"""
 
 # def tag_volumes():
 #     volumes = {}
@@ -80,16 +77,14 @@ def boto3_tag_list_to_ansible_dict(tags_list):
             tags_dict[tag['key']] = tag['value']
         elif 'Key' in tag and not tag['Key'].startswith('aws:'):
             tags_dict[tag['Key']] = tag['Value']
-
     return tags_dict
 #
 #
-# def ansible_dict_to_boto3_tag_list(tags_dict):
-#     tags_list = []
-#     for k, v in tags_dict.items():
-#         tags_list.append({'Key': k, 'Value': v})
-#
-#     return tags_list
+def ansible_dict_to_boto3_tag_list(tags_dict):
+    tags_list = []
+    for k, v in tags_dict.items():
+        tags_list.append({'Key': k, 'Value': v})
+    return tags_list
 #
 #
 # def handler(event, context):
