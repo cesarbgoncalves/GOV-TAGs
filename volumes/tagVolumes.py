@@ -35,7 +35,6 @@ def teste():
     tag_v = 0
     tag_instancia = 0
     response = ec2.describe_instances(InstanceIds=inst_com_volumes_sem_tags())
-    # instancias = list(inst_com_volumes_sem_tags())
     for i in response['Reservations']:
         for t in i['Instances']:
             tag_instancia = t['InstanceId']

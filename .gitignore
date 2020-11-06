@@ -19,7 +19,7 @@ grafana/grafana.db
 kubernetes/ansible/kubernetes.regene.k8s.cloud.bionexo.com.br-d2:c6:f4:e3:76:c2:1c:e5:60:dd:f8:ba:1e:3d:57:b1.pem
 # Byte-compiled / optimized / DLL files
 *__pycache__/
-*.py[cod]
+
 *$py.class
 
 # C extensions
