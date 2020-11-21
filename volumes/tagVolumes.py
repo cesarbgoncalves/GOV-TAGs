@@ -26,7 +26,6 @@ def inst_com_volumes_sem_tags():
             for teste in value['Attachments']:
                 if teste['VolumeId'] in volumes_sem_tags:
                     inst_vol_notag.append(teste['InstanceId'])
-    # return volumes_sem_tags
     return inst_vol_notag
 
 
