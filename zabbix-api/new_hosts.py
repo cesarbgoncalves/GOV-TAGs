@@ -1,10 +1,17 @@
 from pyzabbix import ZabbixAPI
 import csv
 
-zapi = ZabbixAPI("https://zabbix.cloud.bionexo.com.br/")
-zapi.login(user='cgoncalves', password='.1@Dm1n)!0192')
+# URL do Zabbix
+zabbix_url = 'https://zabbix.cloud.bionexo.com.br/'
 
-zapi = ZabbixAPI(url='https://zabbix.cloud.bionexo.com.br/', user='cgoncalves', password='.1@Dm1n)!0192')
+# Coleta senha na memória do Computador
+password = os.environ.get('PASS_ZABBIX')
+
+# Coleta o usuario da memória do computador
+username = os.environ.get('USER_ZABBIX')
+
+# Autenticacao
+zapi = ZabbixAPI(url=zabbix_url, user=username, password=password)
 
 f = csv.reader(open('hosts.csv'))
 

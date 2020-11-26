@@ -1,12 +1,22 @@
 from pyzabbix.api import ZabbixAPI
-import csv
+
+
+# URL do Zabbix
+zabbix_url = 'https://zabbix.cloud.bionexo.com.br/'
+
+# Coleta senha na memória do Computador
+password = os.environ.get('PASS_ZABBIX')
+
+# Coleta o usuario da memória do computador
+username = os.environ.get('USER_ZABBIX')
 
 """IDs dos hosts no zabbix"""
 # for host_id in range(41865, 41881):
 
 count = 0
 
-zapi = ZabbixAPI(url='https://zabbix.cloud.bionexo.com.br/', user='cgoncalves', password='.1@Dm1n)!0192')
+# Autenticacao
+zapi = ZabbixAPI(url=zabbix_url, user=username, password=password)
 
 for host_id in 41879, 41872, 41880:
 

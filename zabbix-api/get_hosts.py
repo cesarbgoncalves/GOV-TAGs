@@ -1,7 +1,17 @@
 from pyzabbix.api import ZabbixAPI
 from pprint import pprint
 
-zapi = ZabbixAPI(url='https://zabbix.cloud.bionexo.com.br/', user='cgoncalves', password='.1@Dm1n)!0192')
+# URL do Zabbix
+zabbix_url = 'https://zabbix.cloud.bionexo.com.br/'
+
+# Coleta senha na memória do Computador
+password = os.environ.get('PASS_ZABBIX')
+
+# Coleta o usuario da memória do computador
+username = os.environ.get('USER_ZABBIX')
+
+# Autenticacao
+zapi = ZabbixAPI(url=zabbix_url, user=username, password=password)
 
 hosts = zapi.host.get(monitored_hosts=1, output='extend')
 

@@ -42,8 +42,8 @@ for host in range(41865, 41881):
         print(f'Alterando Web Scenarios do Host {host}')
         for web_id in https_ids:
 
-            webscenario = zapi.httptest.update(httptestid=web_id, delay='5m')
-            print(f'HostID: {host} -> HostName: {nome_do_host:<27} -> WebScenario: {web_id, webscenario}')
+            # webscenario = zapi.httptest.update(httptestid=web_id, delay='5m')
+            print(f'HostID: {host} -> HostName: {nome_do_host:<27} -> WebScenario: {web_id}')
 
 
 # Zabbix Logout
