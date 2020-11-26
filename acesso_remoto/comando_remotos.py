@@ -2,6 +2,7 @@ import paramiko
 address = 'zabbix'
 username = 'cgoncalves'
 
+
 def ssh_connect(command):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -10,6 +11,7 @@ def ssh_connect(command):
     stdin.close()
     result = stdout.readlines()
     return result
+
 
 check_status = ssh_connect('systemctl status zabbix-server.service')
 
