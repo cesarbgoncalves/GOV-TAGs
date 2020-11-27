@@ -14,8 +14,8 @@ zapi = ZabbixAPI(url=zabbix_url, user=username, password=password)
 with open('webscenariosName.txt', 'r') as doc_nomes:
     for linha in doc_nomes:
         linha = linha.strip()
-    #     trigger_webscenarios = zapi.trigger.create(description=f'[VidaFertil - {linha}]',
-    #                                                expression=f'{{Biotracker - VidaFertil:web.test.fail[{linha}].min(6m)}}<>0',
-    #                                                priority=3)
+        trigger_webscenarios = zapi.trigger.create(description=f'[VidaFertil - {linha}]',
+                                                   expression=f'{{Biotracker - VidaFertil:web.test.fail[{linha}].min(6m)}}<>0',
+                                                   priority=3)
 
-        print(linha)
+        print(trigger_webscenarios)
