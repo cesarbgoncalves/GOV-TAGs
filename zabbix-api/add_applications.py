@@ -1,4 +1,5 @@
 from pyzabbix.api import ZabbixAPI
+import os
 
 
 # URL do Zabbix
